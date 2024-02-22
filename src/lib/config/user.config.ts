@@ -1,6 +1,10 @@
 import { Permission } from "@/types/permission";
+import bcrypt from "bcryptjs";
 
 const config = {
+  passwordSaltRounds: 12,
+  passwordHashFunction: bcrypt.hash,
+  passwordCompareFunction: bcrypt.compare,
   min: {
     password: 8,
     name: 4,
