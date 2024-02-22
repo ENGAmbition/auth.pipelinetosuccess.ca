@@ -1,7 +1,5 @@
 import NextAuth, { User } from "next-auth";
 import Credentials from "next-auth/providers/credentials";
-import { trpc } from "./trpc/serverClient";
-import { userConfig } from "./config";
 
 export const handler = NextAuth({
   secret: process.env.NEXTAUTH_SECRET,
@@ -13,7 +11,7 @@ export const handler = NextAuth({
       // The name to display on the sign-in form
       name: "Credentials",
       credentials: {
-        email: { label: "Email", type: "text" },
+        username: { label: "Username", type: "text" },
         password: { label: "Password", type: "password" },
       },
 
@@ -23,30 +21,21 @@ export const handler = NextAuth({
         }
 
         /**
-         * Fetch the user by their email (unsecure, used for next-auth credentials provider)
+         * Validate credentials
+         *
+         * If the credentials are valid, the function should return an object that contains the user's information.
+         * If the credentials are invalid, the function should return null.
+         *
+         * TODO: Replace temporary credentials with a real database query
          */
-        const res = await trpc.getUserByEmailUnsecure({
-          email: credentials.email,
-        });
-
-        if (!res.success || !res.user?.password) {
+        if (
+          credentials.username !== "someonesusername" &&
+          credentials.password !== "someonespassword"
+        ) {
           return null;
         }
 
-        /**
-         * Validate credentials and return the user if they are valid.
-         *
-         * We use the passwordCompareFunction from the user config to compare the
-         * password from the credentials with the password from the user.
-         *
-         * This is a bcrypt compare function provided by the bcryptjs library.
-         */
-        const allowed = await userConfig.passwordCompareFunction(
-          credentials.password,
-          res.user.password
-        );
-
-        return allowed ? res.user : null;
+        return {} as User;
       },
     }),
   ],

@@ -1,4 +1,4 @@
-import { type Permission } from "@/types/permission";
+import { type Permission } from "@/types/types";
 import "next-auth";
 
 declare module "next-auth" {
