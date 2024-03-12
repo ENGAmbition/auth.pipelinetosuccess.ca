@@ -29,9 +29,26 @@ export const usersRouter = {
   /**
    *
    */
-  resetUserPassword: publicProcedure
-    .input(z.object({ email: z.string(), password: z.string() }))
+  generateUserPasswordResetUrl: publicProcedure
+    .input(z.object({ email: z.string() }))
     .mutation(async ({ input }) => {
       const user = await Prisma.getUserByEmailUnsecure(input.email);
+
+      if (!user) {
+        return { success: false, message: "User not found" };
+      }
+    }),
+
+  /**
+   *
+   */
+  verifyUserPasswordReset: publicProcedure
+    .input(z.object({ email: z.string(), token: z.string() }))
+    .mutation(async ({ input }) => {
+      const user = await Prisma.getUserByEmailUnsecure(input.email);
+
+      if (!user) {
+        return { success: false, message: "User not found" };
+      }
     }),
 };
