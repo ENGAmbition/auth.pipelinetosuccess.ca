@@ -39,7 +39,6 @@ export const usersRouter = {
       if (!user) {
         return { success: false, message: "User not found" };
       }
-      
       // securly transmit token expiring in 15 mins
       const token = jwt.sign(process.env.JWT_SECRET, { expiresIn: '15m' });
 
@@ -47,7 +46,7 @@ export const usersRouter = {
     }),
 
   /**
-   * gets user by email and gets token to encode and decode
+   * verifys user's password
    */
   verifyUserPasswordReset: publicProcedure
     .input(z.object({ email: z.string(), token: z.string() }))
