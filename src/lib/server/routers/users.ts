@@ -69,6 +69,7 @@ export const usersRouter = {
   /**
    * verifys user's password
    */
+  // NEED TO VERIFY PASSWORD USER ENTERS
   verifyUserPasswordReset: publicProcedure
     .input(z.object({ email: z.string(), token: z.string() }))
     .mutation(async ({ input }) => {
@@ -77,5 +78,7 @@ export const usersRouter = {
       if (!user) {
         return { success: false, message: "User not found" };
       }
+
+
     }),
 };
