@@ -25,4 +25,13 @@ export const usersRouter = {
 
       return { user, success: true, message: "Success" };
     }),
+
+  /**
+   *
+   */
+  resetUserPassword: publicProcedure
+    .input(z.object({ email: z.string(), password: z.string() }))
+    .mutation(async ({ input }) => {
+      const user = await Prisma.getUserByEmailUnsecure(input.email);
+    }),
 };
