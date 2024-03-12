@@ -2,6 +2,8 @@ import { Prisma } from "@/lib/prisma";
 import { publicProcedure } from "../trpc";
 import { z } from "zod";
 import { User } from "next-auth";
+import { use } from "react";
+const jwt = require('jwt-simple');
 
 export const usersRouter = {
   /**
@@ -24,5 +26,36 @@ export const usersRouter = {
       const user = await Prisma.getUserByEmailUnsecure(input.email);
 
       return { user, success: true, message: "Success" };
+    }),
+
+  /**
+   * gets a user by their email and generates a password reset URL to be sent to the user
+   */
+  generateUserPasswordRestUrl: publicProcedure
+    .input(z.object({ email: z.string() }))
+    .mutation(async ({ input }) => {
+      const user = await Prisma.getUserByEmailUnsecure(input.email);
+
+      if (!user) {
+        return { success: false, message: "User not found" };
+      }
+      
+      // securly transmit token expiring in 15 mins
+      const token = jwt.sign(process.env.JWT_SECRET, { expiresIn: '15m' });
+
+      // TO DO SEND EMAIL
+    }),
+
+  /**
+   * gets user by email and gets token to encode and decode
+   */
+  verifyUserPasswordReset: publicProcedure
+    .input(z.object({ email: z.string(), token: z.string() }))
+    .mutation(async ({ input }) => {
+      const user = await Prisma.getUserByEmailUnsecure(input.email);
+
+      if (!user) {
+        return { success: false, message: "User not found" };
+      }
     }),
 };
