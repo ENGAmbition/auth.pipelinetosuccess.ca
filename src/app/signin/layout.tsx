@@ -9,7 +9,7 @@ const poppins = Poppins({
 });
 
 export const metadata: Metadata = {
-  title: "Pipeline to Success | Auth",
+  title: "Pipeline to Success | Sign in",
   description:
     "Pipeline to Success is a non-profit organization at the University of Guelph.",
 };

@@ -1,13 +1,13 @@
-import { trpc } from "@/lib/trpc/client";
 import { JSX } from "react";
+import { useSession } from "next-auth/react";
+import { redirect } from "next/navigation";
 
 export default function Home(): JSX.Element {
-  const { mutateAsync: generatePasswordResetUrl } =
-    trpc.generateUserPasswordResetUrl.useMutation();
+  const { data: session } = useSession();
 
-  // const result = await generatePasswordResetUrl({email: ""});
-
-  return (
-    <main className="flex min-h-screen flex-col items-center justify-center p-24"></main>
-  );
+  if (!session) {
+    redirect("/signin");
+  } else {
+    redirect("/signup");
+  }
 }
