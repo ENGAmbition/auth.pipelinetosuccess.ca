@@ -1,7 +1,13 @@
 import { JSX } from "react";
+import { useSession } from "next-auth/react";
+import { redirect } from "next/navigation";
 
 export default function Home(): JSX.Element {
-  return (
-    <main className="flex min-h-screen flex-col items-center justify-center p-24"></main>
-  );
+  const { data: session } = useSession();
+
+  if (!session) {
+    redirect("/signin");
+  } else {
+    redirect("/signup");
+  }
 }
